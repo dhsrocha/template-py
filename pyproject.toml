@@ -1,0 +1,68 @@
+[build-system]
+requires = ["poetry>=1.0.0", "setuptools"]
+build-backend = "poetry.masonry.api"
+
+[tool.poetry]
+name = "template-py"
+version = "0.1.0"
+description = "Template for python projects."
+authors = ["Diego Henrique da Silva Rocha <dhsrocha@gmail.com>"]
+readme = "README.md"
+license = "Proprietary"
+
+[tool.poetry.dependencies]
+python = "^3.8"
+
+[tool.poetry.dev-dependencies]
+flake8 = "*"
+hacking = "*"
+black = "^19.10b0"
+mypy = "*"
+ipython = "*"
+ipdb = "*"
+docker = "*"
+isort = "*"
+pydocstyle = "*"
+sphinx = "*"
+pytest = "*"
+pytest-cov = "*"
+pytest-mock = "*"
+pytest-flakes = "*"
+pytest-bdd = "*"
+pytest-instafail = "*"
+xdoctest = "*"
+click = "*"
+
+# https://github.com/psf/black/blob/master/pyproject.toml
+[tool.black]
+line-length = 79
+target-version = ['py38']
+include = '\.pyi?$'
+exclude = '''
+/(
+    \.eggs
+  | \.git
+  | \.hg
+  | \.mypy_cache
+  | \.tox
+  | \.venv
+  | _build
+  | buck-out
+  | build
+  | dist
+  # The following are specific to Black, you probably don't want those.
+  | blib2to3
+  | tests/data
+  | profiling
+)/
+'''
+
+[tool.isort]
+line_length = 79
+known_future_library = [ "future", "pies"]
+indent='    '
+multi_line_output = 3
+length_sort = 1
+forced_separate = [ "django.contrib" ,"django.utils" ]
+default_section = "FIRSTPARTY"
+no_lines_before = "LOCALFOLDER"
