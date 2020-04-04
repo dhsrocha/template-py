@@ -9,6 +9,12 @@ description = "Template for python projects."
 authors = ["Diego Henrique da Silva Rocha <dhsrocha@gmail.com>"]
 readme = "README.md"
 license = "Proprietary"
+packages = [
+  { include = "app", from = "src" }
+]
+
+[tool.poetry.scripts]
+deploy = "src.middleware:deploy"
 
 [tool.poetry.dependencies]
 python = "^3.8"

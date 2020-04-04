@@ -1,0 +1,85 @@
+version: '3.7'
+
+# @see middleware.deploy.yml
+
+### ### ###
+services:
+
+  ### ### https://hub.docker.com/r/portainer/portainer
+  docker-manager:
+    container_name: deploy-manager
+    image: portainer/portainer
+    restart: always
+    healthcheck:
+      test: exit 0
+    ports:
+      - 9500:9000
+    volumes:
+      - manager-data:/data
+      - /var/run/deploy.sock:/var/run/deploy.sock
+
+  ### ### https://hub.docker.com/_/mongo-express/
+  nosql-client:
+    image: mongo-express
+    restart: always
+    healthcheck:
+      test: exit 0
+    ports:
+      - 27018:8081
+    depends_on:
+      - nosql
+      # condition: service_healthy
+    networks:
+      - nosql
+    environment:
+      # https://hub.docker.com/_/mongo-express#configuration
+      # Should follow the defined in 'nosql' image
+      ME_CONFIG_MONGODB_SERVER: nosql
+      # ME_CONFIG_MONGODB_PORT:   27017
+      ME_CONFIG_MONGODB_ENABLE_ADMIN: 'true'
+      ME_CONFIG_OPTIONS_EDITORTHEME: rubyblue
+      ME_CONFIG_MONGODB_AUTH_DATABASE: ${ME_CONFIG_MONGODB_AUTH_DATABASE-base}
+      ME_CONFIG_MONGODB_AUTH_USERNAME: ${ME_CONFIG_MONGODB_AUTH_USERNAME-user}
+      ME_CONFIG_MONGODB_AUTH_PASSWORD: ${ME_CONFIG_MONGODB_AUTH_PASSWORD-password}
+      ME_CONFIG_MONGODB_ADMINUSERNAME: ${ME_CONFIG_MONGODB_ADMINUSERNAME-user}
+      ME_CONFIG_MONGODB_ADMINPASSWORD: ${ME_CONFIG_MONGODB_ADMINPASSWORD-password}
+
+  ### ### https://www.pgadmin.org/download/pgadmin-4-container/
+  rdb-client:
+    image: dpage/pgadmin4
+    restart: always
+    healthcheck:
+      test: exit 0
+    depends_on:
+      - rdb
+      # condition: service_healthy
+    ports:
+      - 15432:15432
+    networks:
+      - rdb
+    volumes:
+      - rdb-client-data:/var/lib/pgadmin
+    environment:
+      PGADMIN_LISTEN_PORT:      15432
+      PGADMIN_DEFAULT_EMAIL:    ${PGADMIN_DEFAULT_EMAIL-user}
+      PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_DEFAULT_PASSWORD-password}
+
+### ### ###
+# @see middleware.deploy.yml
+networks:
+  ###
+  nosql:
+    external: true
+  ###
+  rdb:
+    external: true
+  ###
+  msg:
+    external: true
+
+### ### ###
+volumes:
+  ###
+  manager-data:
+  ###
+  rdb-client-data:

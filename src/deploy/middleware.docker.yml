@@ -1,0 +1,84 @@
+version: '3.7'
+
+# Intended to be extended throughout project's modules
+# Preferably, this file should be executed from some :middleware: task
+
+### ### ###
+services:
+
+  ### ### https://hub.docker.com/_/mongo
+  nosql:
+    image: mongo
+    restart: always
+    healthcheck:
+      test: exit 0
+    ports:
+      - 27017:27017
+    networks:
+      - nosql
+    volumes:
+      - nosql-data:/data/db
+      - nosql-config:/data/configdb
+    environment:
+      # Set up admin user
+      # MONGO_INITDB_DATABASE:      ${MONGO_INITDB_DATABASE-base}
+      MONGO_INITDB_ROOT_USERNAME: ${MONGO_INITDB_ROOT_USERNAME-user}
+      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_INITDB_ROOT_PASSWORD-password}
+
+  ### ### https://hub.docker.com/_/postgres/
+  rdb:
+    image: postgres
+    restart: always
+    healthcheck:
+      test: exit 0
+    ports:
+      - 5432:5432
+    networks:
+      - rdb
+    volumes:
+      - rdb-data:/var/lib/postgresql/data
+    environment:
+      POSTGRES_DB:        ${POSTGRES_DB-base}
+      POSTGRES_USER:      ${POSTGRES_USER-user}
+      POSTGRES_PASSWORD:  ${POSTGRES_PASSWORD-password}
+
+  ### ### https://hub.docker.com/_/rabbitmq
+  msg:
+    image: rabbitmq:3-management
+    restart: always
+    healthcheck:
+      test: exit 0
+    ports:
+      - 5672:5672
+      - 15672:15672
+      - 35197:35197
+    networks:
+      - msg
+    volumes:
+      - msg-data:/var/lib/rabbitmq
+    environment:
+      RABBITMQ_DEFAULT_USER: ${RABBITMQ_DEFAULT_USER-user}
+      RABBITMQ_DEFAULT_PASS: ${RABBITMQ_DEFAULT_PASS-password}
+
+### ### ###
+networks:
+  ###
+  nosql:
+    driver: bridge
+  ###
+  rdb:
+    driver: bridge
+  ###
+  msg:
+    driver: bridge
+
+### ### ###
+volumes:
+  ###
+  nosql-data:
+  ###
+  nosql-config:
+  ###
+  rdb-data:
+  ###
+  msg-data:
