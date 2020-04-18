@@ -16,6 +16,14 @@
         alt="Buy me a mug"
         title="donate-paypal"/>
     </a>
+    &nbsp;
+    <a
+      href=".github/workflows/pipeline.yml">
+      <img
+        src="https://github.com/dhsrocha/template-py/workflows/.github/workflows/pipeline.yml/badge.svg"
+        alt="CI report"
+        title="CI report"/>
+    </a>
 </p>
 
 <p align="center">

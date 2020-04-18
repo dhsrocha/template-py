@@ -16,8 +16,7 @@ jobs:
           submodules: true
           fetch-depth: 0
 
-      - name: Linting.
-        uses: ./setup.sh
+      - uses: ./setup.sh
         run: |
           poetry shell
           pyenv versions
@@ -25,8 +24,7 @@ jobs:
           flake8 .
           pytest .
 
-      - name: Caching.
-        uses: actions/cache@v1
+      - uses: actions/cache@v1
         with:
           path: ~/.cache/pip
           key: ${{ runner.os }}-pip-${{ hashFiles('**/poetry.lock') }}
