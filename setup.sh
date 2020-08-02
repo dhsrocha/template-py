@@ -64,7 +64,7 @@ setup() {
     } && {
       grep -qE "(eval.+pyenv)" "$RC" || {
         log "$WARN" "✔ Appending pyenv initialization snippet to $RC." && {
-          printf "\n# ::: Pyenv configuration :::\n"
+          printf "\\n# ::: Pyenv configuration :::\\n"
           echo "# https://github.com/pyenv/pyenv-virtualenv/issues/36"
           echo "# https://github.com/python-poetry/poetry/issues/172"
           echo "export PATH=\"\$HOME/.pyenv/bin:\$PATH\""
@@ -132,7 +132,7 @@ setup() {
     . "$HOME/.poetry/env"
     grep -qE ".poetry/env" "$RC" || {
       log "$WARN" "✔ Appending pypoetry initialization snippet to $RC." && {
-        printf "\n# ::: PyPoetry configuration :::\n"
+        printf "\\n# ::: PyPoetry configuration :::\\n"
         echo "# shellcheck source=\$HOME/.poetry/env"
         echo ". \$HOME/.poetry/env"
       } >>"$RC"
@@ -186,9 +186,9 @@ setup() {
   log() {
     set -u
     [ "$IS_LOG" -eq 1 ] && { case "$1" in 31 | 32 | 33 | 34)
-      [ -t 1 ] && printf "\033[%sm%s\033[0m\n" "$1" "$2" || echo "$2"
+      [ -t 1 ] && printf "\\033[%sm%s\\033[0m\\n" "$1" "$2" || echo "$2"
       ;;
-    *) printf "\033[${INFO}m%s\033[0m\n" "$*" ;; esac }
+    *) printf "\\033[${INFO}m%s\\033[0m\\n" "$*" ;; esac }
     set +u
     return 0
   }
